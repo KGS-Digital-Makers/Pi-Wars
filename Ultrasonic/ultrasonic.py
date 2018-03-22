@@ -60,7 +60,7 @@ try:
         if usm2 < 10::
             TB.MotorsOff()
             if usm1 < 10:
-                TB.SetMotor1(-3)                    
+                TB.SetMotor1(-3)                   
                 TB.SetMotor2(3)
                 TB.SetMotors(5)
             else: 
@@ -68,7 +68,8 @@ try:
                 TB.SetMotor2(-3)
                 TB.SetMotors(5)
         else:
-
+             TB.SetMotors(5)
+                
         if usm3 < 10: 
             
         else:
