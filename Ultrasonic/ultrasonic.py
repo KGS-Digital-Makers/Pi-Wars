@@ -21,9 +21,9 @@ try:
         #insert motor code here
 
         # Read all four ultrasonic values
-        usm1 = UB.GetDistance1()
-        usm2 = UB.GetDistance2()
-        usm3 = UB.GetDistance3()
+        usm1 = UB.GetDistance1() #left sensor
+        usm2 = UB.GetDistance2() #front sensor
+        usm3 = UB.GetDistance3() #right sensor
         usm4 = UB.GetDistance4()
         # Convert to the nearest millimeter
         usm1 = int(usm1)
