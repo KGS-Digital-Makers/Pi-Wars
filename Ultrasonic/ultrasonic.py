@@ -17,7 +17,7 @@ UB.Init()                       # Set the board up (checks the board is connecte
 print 'Press CTRL+C to finish'
 try:
     while True:
-
+        TB.SetMotors(5)
         #insert motor code here
 
         # Read all four ultrasonic values
@@ -58,7 +58,15 @@ try:
         else:
 
         if usm2 < 10::
-            TB.MotorsOff() 
+            TB.MotorsOff()
+            if usm1 < 10:
+                TB.SetMotor1(-3)                    
+                TB.SetMotor2(3)
+                TB.SetMotors(5)
+            else: 
+                TB.SetMotor1(3)                    
+                TB.SetMotor2(-3)
+                TB.SetMotors(5)
         else:
 
         if usm3 < 10: 
