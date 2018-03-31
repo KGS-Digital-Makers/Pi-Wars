@@ -1,10 +1,21 @@
+#!/usr/bin/env python
+# coding: latin-1
 
-import ThunderBorg
+# Import the libraries we need
+import UltraBorg
 import time
+import ThunderBorg
 import sys
 import RPi.GPIO as GPIO
 global TB
 global step
+
+
+
+# Start the UltraBorg
+UB = UltraBorg.UltraBorg()      # Create a new UltraBorg object
+UB.Init()
+
 maxPower = 1.00
 holdingPower = 0.50
 sequence = [                            # Order for stepping 
@@ -29,7 +40,7 @@ if not TB.foundChip:
         print 'No ThunderBorg at address %02X, but we did find boards:' % (TB.i2cAddress)
         for board in boards:
             print '    %02X (%d)' % (board, board)
-        print 'If you need to change the IÂ²C address change the setup line so it is correct, e.g.'
+        print 'If you need to change the I²C address change the setup line so it is correct, e.g.'
         print 'TB.i2cAddress = 0x%02X' % (boards[0])
     sys.exit()
 step = -1
@@ -54,65 +65,57 @@ print
 print '    Current voltage    %02.2f V' % (battCurrent)
 print
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(40, GPIO.IN)  # Left Line Sensor Reading
-GPIO.setup(36, GPIO.IN)  # Right Line Sensor Reading
-GPIO.setup(38, GPIO.IN)  # Middle Line Sensor Reading
-
-print "Waiting For Sensor To Settle"
-time.sleep(2)
-
-
-
-def GetSensorReadings():
-    print "Taking sensor readings"
-    leftlinesensor = GPIO.input(40)
-    middlelinesensor = GPIO.input(38)
-    rightlinesensor = GPIO.input(36)
-    print leftlinesensor
-    print middlelinesensor
-    print rightlinesensor
-    return leftlinesensor, middlelinesensor, rightlinesensor
-
-
-def Forward():
-    TB.SetMotor1(5)
-    TB.SetMotor2(5)
-
-def Reverse():
-    TB.SetMotor1(-5)
-    TB.SetMotor2(-5)
-
-
-def Right():
-    TB.SetMotor1(5)
-    TB.SetMotor2(-5)
-
-
-def Left():
-    TB.SetMotor1(-5)
-    TB.SetMotor2(5)
-
 try:
-    while (True):
-        leftlinesensor, middlelinesensor, rightlinesensor = GetSensorReadings()
-        if leftlinesensor == 1 and rightlinesensor == 0:
-            TB.SetMotor1(0)
-            TB.SetMotor2(0)
-            time.sleep(0.15)
-            Right()
-            time.sleep(0.15)
-        elif rightlinesensor == 1 and leftlinesensor == 0:
-            TB.SetMotor1(0)
-            TB.SetMotor2(0)
-            time.sleep(0.15)
-            Left()
-            time.sleep(0.15)
+    while True:
+        # Read all four ultrasonic values
+        usm1 = UB.GetDistance1() #front
+        usm2 = UB.GetDistance2() #right
+        usm3 = UB.GetDistance3() #left
+
+        # Convert to the nearest millimeter
+        usm1 = int(usm1)
+        usm2 = int(usm2)
+        usm3 = int(usm3)
+        # Display the readings
+        if usm1 == 0:
+            print '#1 No reading'
         else:
-            Forward()
-       
-finally:
-    TB.SetMotor1(0)
-    TB.SetMotor2(0)
-    print("Cleaning Up!")
-    GPIO.cleanup()
+            print '#1 % 4d mm' % (usm1)
+        if usm2 == 0:
+            print '#2 No reading'
+        else:
+            print '#2 % 4d mm' % (usm2)
+        if usm3 == 0:
+            print '#3 No reading'
+        else:
+            print '#3 % 4d mm' % (usm3)
+        
+        print
+        # Wait between readings
+        #time.sleep(.5)
+
+        if usm1 < 400:
+            if usm3 < 300:
+                TB.SetMotor1(1)
+                TB.SetMotor2(-1)
+            elif usm2 < 300:
+                TB.SetMotor1(-1)
+                TB.SetMotor2(1)
+            else:
+                TB.MotorsOff()
+                
+        else:
+            TB.SetMotors(0.6)
+
+        
+
+        
+            
+
+            
+except KeyboardInterrupt:
+    # User has pressed CTRL+C
+    TB.MotorsOff()
+    
+    print 'Done'
+

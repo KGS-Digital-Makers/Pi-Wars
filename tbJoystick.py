@@ -41,7 +41,7 @@ if not failsafe:
 axisUpDown = 1                          # Joystick axis to read for up / down position
 axisUpDownInverted = False              # Set this to True if up and down appear to be swapped
 axisLeftRight = 2                       # Joystick axis to read for left / right position
-axisLeftRightInverted = False           # Set this to True if left and right appear to be swapped
+axisLeftRightInverted = True           # Set this to True if left and right appear to be swapped
 buttonSlow = 8                          # Joystick button number for driving slowly whilst held (L2)
 slowFactor = 0.5                        # Speed to slow to when the drive slowly button is held, e.g. 0.5 would be half speed
 buttonFastTurn = 9                      # Joystick button number for turning fast (R2)
