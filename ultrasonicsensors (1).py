@@ -114,12 +114,12 @@ try:
 
         if usm1 < 400 and usm3 < usm2:
             turnRight()
-        elif usm3 < 200:
+        elif usm3 < usm2:
             turnRightKinda()
 
         elif usm1 < 400 and usm2 < usm3:
             turnLeft()
-        elif usm2 < 200:
+        elif usm2 < usm3:
             turnLeftKinda()
                 
         else:
