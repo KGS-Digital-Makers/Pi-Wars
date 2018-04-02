@@ -12,12 +12,12 @@ global step
 
 def turnLeft():
     print "Turning Left"
-    TB.SetMotor1(-0.8)
-    TB.SetMotor2(0.8)
+    TB.SetMotor1(0.6)
+    TB.SetMotor2(0.1)
 def turnRight():
     print "Turning Right"
-    TB.SetMotor1(0.8)
-    TB.SetMotor2(-0.8)
+    TB.SetMotor1(0.1)
+    TB.SetMotor2(0.6)
 
 def turnLeftKinda():
     print "Turning Left Kinda"
@@ -58,7 +58,7 @@ if not TB.foundChip:
         print 'No ThunderBorg at address %02X, but we did find boards:' % (TB.i2cAddress)
         for board in boards:
             print '    %02X (%d)' % (board, board)
-        print 'If you need to change the I²C address change the setup line so it is correct, e.g.'
+        print 'If you need to change the IÂ²C address change the setup line so it is correct, e.g.'
         print 'TB.i2cAddress = 0x%02X' % (boards[0])
     sys.exit()
 step = -1
@@ -112,14 +112,14 @@ try:
         # Wait between readings
         #time.sleep(.5)
 
-        if usm1 < 400 and usm3 < 300:
+        if usm1 < 400 and usm3 < usm2:
             turnRight()
-        elif usm2 < usm3:
+        elif usm3 < 200:
             turnRightKinda()
 
-        elif usm1 < 400 and usm2 < 300:
+        elif usm1 < 400 and usm2 < usm3:
             turnLeft()
-        elif usm3 < usm2:
+        elif usm2 < 200:
             turnLeftKinda()
                 
         else:
